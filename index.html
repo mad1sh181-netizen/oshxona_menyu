@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menga  Maktab Oshxona Menyusi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --dark-color: #292f36;
+            --light-color: #f7fff7;
+            --accent-color: #ffe66d;
+            --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header va navigatsiya */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: var(--primary-color);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-register {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Kirish/Ro'yxatdan o'tish modallari */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+        }
+
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .form-submit:hover {
+            background-color: #ff5252;
+        }
+
+        /* Menyu bo'limlari */
+        .menu-section {
+            padding: 80px 0 40px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--dark-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .category-btn {
+            padding: 12px 25px;
+            background-color: white;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn.active,
+        .category-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: itemAppear 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        @keyframes itemAppear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .item-price {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .item-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .item-order {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-order {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-order:hover {
+            background-color: #3db8af;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--light-color);
+        }
+
+        .footer-links h4 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Animatsiyalar uchun */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive dizayn */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .menu-categories {
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 10px;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header va Navigatsiya -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>MengaMa' Tab</span>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#drinks">Ichimliklar</a>
+                    <a href="#desserts">Shirinliklar</a>
+                    <a href="#meals">Taomlar</a>
+                    <a href="#snacks">Sneklar</a>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button class="btn btn-login" id="openLoginBtn">Kirish</button>
+                    <button class="btn btn-register" id="openRegisterBtn">Ro'yxatdan o'tish</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Kirish Modali -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLoginModal">&times;</span>
+            <h2 class="form-title">Hisobga kirish</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Elektron pochta</label>
+                    <input type="email" id="loginEmail" placeholder="email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Parol</label>
+                    <input type="password" id="loginPassword" placeholder="Parolingizni kiriting" required>
+                </div>
+                <button type="submit" class="form-submit">Kirish</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" style="color: var(--primary-color); text-decoration: none;">Parolni unutdingizmi?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ro'yxatdan o'tish Modali -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeRegisterModal">&times;</span>
+            <h2 class="form-title">Ro'yxatdan o'tish</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regName">Ism</label>
+                    <input type="text" id="regName" placeholder="Ismingiz" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Elektron pochta</label>
+                    <input type="email" id="regEmail" placeholder="email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Parol</label>
+                    <input type="password" id="regPassword" placeholder="Kamida 6 ta belgi" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Parolni tasdiqlash</label>
+                    <input type="password" id="regConfirmPassword" placeholder="Parolni qayta kiriting" required>
+                </div>
+                <button type="submit" class="form-submit">Ro'yxatdan o'tish</button>
+                <div style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                    Ro'yxatdan o'tish orqali siz <a href="#" style="color: var(--primary-color);">foydalanish shartlari</a> bilan rozilik bildirasiz
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ichimliklar bo'limi -->
+    <section class="menu-section" id="drinks">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Ichimliklar</h2>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">Hammasi</button>
+                <button class="category-btn" data-category="hot">Issiq</button>
+                <button class="category-btn" data-category="cold">Sovuq</button>
+                <button class="category-btn" data-category="juice">Sharbatlar</button>
+            </div>
+            
+            <div class="menu-grid">
+                <!-- Ichimliklar bu yerda dinamik ravishda yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Shirinliklar bo'limi -->
+    <section class="menu-section" id="desserts">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Shirinliklar</h2>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">Hammasi</button>
+                <button class="category-btn" data-category="cake">Tortlar</button>
+                <button class="category-btn" data-category="pastry">Pishiriqlar</button>
+                <button class="category-btn" data-category="icecream">Muzqaymoq</button>
+            </div>
+            
+            <div class="menu-grid">
+                <!-- Shirinliklar bu yerda dinamik ravishda yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Taomlar bo'limi -->
+    <section class="menu-section" id="meals">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Taomlar</h2>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">Hammasi</button>
+                <button class="category-btn" data-category="main">Asosiy taomlar</button>
+                <button class="category-btn" data-category="fastfood">Fast food</button>
+                <button class="category-btn" data-category="soup">Sho'rvalar</button>
+            </div>
+            
+            <div class="menu-grid">
+                <!-- Taomlar bu yerda dinamik ravishda yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sneklar bo'limi -->
+    <section class="menu-section" id="snacks">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Sneklar</h2>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">Hammasi</button>
+                <button class="category-btn" data-category="chips">Chips</button>
+                <button class="category-btn" data-category="crackers">Suxarilar</button>
+                <button class="category-btn" data-category="other">Boshqalar</button>
+            </div>
+            
+            <div class="menu-grid">
+                <!-- Sneklar bu yerda dinamik ravishda yuklanadi -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">MengaMa' Tab</div>
+                    <p>Biz eng mazali va sifatli ovqatlarni taqdim etamiz. Har bir mahsulotimiz eng yuqori standartlar asosida tayyorlanadi.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Bo'limlar</h4>
+                    <ul>
+                        <li><a href="#drinks">Ichimliklar</a></li>
+                        <li><a href="#desserts">Shirinliklar</a></li>
+                        <li><a href="#meals">Taomlar</a></li>
+                        <li><a href="#snacks">Sneklar</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Aloqa</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Toshkent shahri, Yunusobod tumani</li>
+                        <li><i class="fas fa-phone"></i> +998 90 123 45 67</li>
+                        <li><i class="fas fa-envelope"></i> info@mengamatab.uz</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 MengaMa' Tab. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Ma'lumotlar bazasi - menyu elementlari
+        const menuData = {
+            drinks: [
+                { id: 1, name: "Kofe Latte", description: "Italyancha sutli kofe", price: "18 000", category: "hot", image: "coffee" },
+                { id: 2, name: "Choy", description: "Qora yoki yashil choy", price: "5 000", category: "hot", image: "tea" },
+                { id: 3, name: "Coca-Cola", description: "Sovuq gazlangan ichimlik", price: "10 000", category: "cold", image: "cola" },
+                { id: 4, name: "Limonli choy", description: "Tabiiy limon sharbati", price: "12 000", category: "juice", image: "lemonade" },
+                { id: 5, name: "Qahva", description: "An'anaviy turk qahvasi", price: "15 000", category: "hot", image: "coffee" },
+                { id: 6, name: "Olma sharbati", description: "Tabiiy olma sharbati", price: "14 000", category: "juice", image: "juice" }
+            ],
+            desserts: [
+                { id: 7, name: "Chocolate Cake", description: "Shokoladli tort", price: "25 000", category: "cake", image: "cake" },
+                { id: 8, name: "Cheesecake", description: "Pishloqli tort", price: "28 000", category: "cake", image: "cake" },
+                { id: 9, name: "Donut", description: "Shokoladli donut", price: "12 000", category: "pastry", image: "donut" },
+                { id: 10, name: "Vanilla Ice Cream", description: "Vanilli muzqaymoq", price: "15 000", category: "icecream", image: "icecream" },
+                { id: 11, name: "Tiramisu", description: "Italyan shirinligi", price: "30 000", category: "cake", image: "cake" },
+                { id: 12, name: "Chocolate Chip Cookie", description: "Shokoladli pechene", price: "8 000", category: "pastry", image: "cookie" }
+            ],
+            meals: [
+                { id: 13, name: "Piroshka", description: "Qiymali pirojnoe", price: "15 000", category: "fastfood", image: "piroshki" },
+                { id: 14, name: "Sendvich", description: "Tovuq go'shtli sendvich", price: "22 000", category: "fastfood", image: "sandwich" },
+                { id: 15, name: "Gumma", description: "Qaymoqli gumma", price: "18 000", category: "fastfood", image: "dumpling" },
+                { id: 16, name: "Sosiskali piroshka", description: "Sosiska bilan pirojnoe", price: "17 000", category: "fastfood", image: "piroshki" },
+                { id: 17, name: "Sho'rva", description: "Go'shtli sho'rva", price: "25 000", category: "soup", image: "soup" },
+                { id: 18, name: "Somsa", description: "Qiymali somsa", price: "12 000", category: "main", image: "samsa" }
+            ],
+            snacks: [
+                { id: 19, name: "Chips", description: "Kartoshka chips", price: "10 000", category: "chips", image: "chips" },
+                { id: 20, name: "Suxarilar", description: "Bug'doy suxarilari", price: "8 000", category: "crackers", image: "crackers" },
+                { id: 21, name: "Qur", description: "Quritilgan mevalar", price: "12 000", category: "other", image: "dried" },
+                { id: 22, name: "Yong'oq", description: "Aralash yong'oq", price: "15 000", category: "other", image: "nuts" },
+                { id: 23, name: "Popcorn", description: "Tuzli popcorn", price: "9 000", category: "other", image: "popcorn" },
+                { id: 24, name: "Chocolate Bar", description: "Sutli shokolad", price: "12 000", category: "other", image: "chocolate" }
+            ]
+        };
+
+        // Rasm ranglari - har bir mahsulot uchun
+        const imageColors = {
+            coffee: "#6f4e37",
+            tea: "#d4a574",
+            cola: "#8b0000",
+            lemonade: "#ffd700",
+            juice: "#ff4500",
+            cake: "#d2691e",
+            donut: "#8b4513",
+            icecream: "#ffebcd",
+            cookie: "#a0522d",
+            piroshki: "#ff8c00",
+            sandwich: "#daa520",
+            dumpling: "#deb887",
+            soup: "#ff6347",
+            samsa: "#cd853f",
+            chips: "#ffa500",
+            crackers: "#f5deb3",
+            dried: "#8b7355",
+            nuts: "#8b4513",
+            popcorn: "#fffacd",
+            chocolate: "#8b4513"
+        };
+
+        // Modal elementlarini aniqlash
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const openLoginBtn = document.getElementById('openLoginBtn');
+        const openRegisterBtn = document.getElementById('openRegisterBtn');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        // Kirish modalini ochish
+        openLoginBtn.addEventListener('click', function() {
+            loginModal.style.display = 'flex';
+            console.log('Kirish modal ochildi');
+        });
+
+        // Ro'yxatdan o'tish modalini ochish
+        openRegisterBtn.addEventListener('click', function() {
+            registerModal.style.display = 'flex';
+            console.log('Ro\'yxatdan o\'tish modal ochildi');
+        });
+
+        // Kirish modalini yopish
+        closeLoginModal.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+        });
+
+        // Ro'yxatdan o'tish modalini yopish
+        closeRegisterModal.addEventListener('click', function() {
+            registerModal.style.display = 'none';
+        });
+
+        // Tashqariga bosilganda modalni yopish
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+            if (e.target === registerModal) {
+                registerModal.style.display = 'none';
+            }
+        });
+
+        // Kirish formasi yuborilganda
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Oddiy tekshirish
+            if (email && password) {
+                // Amaliyotda bu yerda serverga so'rov yuboriladi
+                console.log('Kirish ma\'lumotlari:', { email, password });
+                
+                // Modalni yopish
+                loginModal.style.display = 'none';
+                
+                // Foydalanuvchiga xabar
+                showNotification('Muvaffaqiyatli kirildi!', 'success');
+                
+                // Tugmalarni o'zgartirish (kirgan foydalanuvchi uchun)
+                document.querySelector('.auth-buttons').innerHTML = `
+                    <button class="btn btn-login" id="logoutBtn">Chiqish</button>
+                    <button class="btn btn-register" id="profileBtn">Profil</button>
+                `;
+                
+                // Yangi tugmalarga hodisa qo'shish
+                document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+                document.getElementById('profileBtn').addEventListener('click', showProfile);
+                
+                // Formani tozalash
+                loginForm.reset();
+            } else {
+                showNotification('Iltimos, barcha maydonlarni to\'ldiring!', 'error');
+            }
+        });
+
+        // Ro'yxatdan o'tish formasi yuborilganda
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // Tekshirishlar
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('Iltimos, barcha maydonlarni to\'ldiring!', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Parol kamida 6 ta belgidan iborat bo\'lishi kerak!', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Parollar mos kelmadi!', 'error');
+                return;
+            }
+            
+            // Amaliyotda bu yerda serverga so'rov yuboriladi
+            console.log('Ro\'yxatdan o\'tish ma\'lumotlari:', { name, email, password });
+            
+            // Modalni yopish
+            registerModal.style.display = 'none';
+            
+            // Foydalanuvchiga xabar
+            showNotification('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!', 'success');
+            
+            // Formani tozalash
+            registerForm.reset();
+        });
+
+        // Xabarlarni ko'rsatish funksiyasi
+        function showNotification(message, type) {
+            // Oldingi xabarlarni o'chirish
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            // Yangi xabarni yaratish
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 3000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            // Turiga qarab rang
+            if (type === 'success') {
+                notification.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = '#f44336';
+            } else {
+                notification.style.backgroundColor = '#2196F3';
+            }
+            
+            document.body.appendChild(notification);
+            
+            // 5 sekunddan keyin o'chirish
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+            
+            // Animatsiya uchun CSS qo'shish
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Foydalanuvchi chiqishi
+        function logoutUser() {
+            // Tugmalarni asl holatiga qaytarish
+            document.querySelector('.auth-buttons').innerHTML = `
+                <button class="btn btn-login" id="openLoginBtn">Kirish</button>
+                <button class="btn btn-register" id="openRegisterBtn">Ro'yxatdan o'tish</button>
+            `;
+            
+            // Yangi tugmalarga hodisa qo'shish
+            document.getElementById('openLoginBtn').addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+            
+            document.getElementById('openRegisterBtn').addEventListener('click', function() {
+                registerModal.style.display = 'flex';
+            });
+            
+            showNotification('Muvaffaqiyatli chiqildi!', 'success');
+        }
+
+        // Profilni ko'rsatish
+        function showProfile() {
+            showNotification('Profil sahifasi tez orada qo\'shiladi!', 'info');
+        }
+
+        // Menyu elementlarini yuklash
+        function loadMenuItems(sectionId, items) {
+            const section = document.getElementById(sectionId);
+            const menuGrid = section.querySelector('.menu-grid');
+            
+            // Tozalash
+            menuGrid.innerHTML = '';
+            
+            // Har bir elementni qo'shish
+            items.forEach((item, index) => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item animate-on-scroll';
+                menuItem.dataset.category = item.category;
+                menuItem.style.animationDelay = `${index * 0.1}s`;
+                
+                // Rasm uchun rang
+                const bgColor = imageColors[item.image] || "#ff6b6b";
+                
+                menuItem.innerHTML = `
+                    <div class="item-image" style="background-color: ${bgColor};">
+                        <div class="item-price">${item.price} so'm</div>
+                    </div>
+                    <div class="item-content">
+                        <h3 class="item-title">${item.name}</h3>
+                        <p class="item-description">${item.description}</p>
+                        <div class="item-order">
+                            <button class="btn-order">Buyurtma berish</button>
+                            <i class="fas fa-heart" style="color: #ddd; cursor: pointer;"></i>
+                        </div>
+                    </div>
+                `;
+                
+                // Buyurtma berish tugmasi
+                const orderBtn = menuItem.querySelector('.btn-order');
+                orderBtn.addEventListener('click', () => {
+                    orderBtn.textContent = "Qo'shildi!";
+                    orderBtn.style.backgroundColor = "#4CAF50";
+                    
+                    setTimeout(() => {
+                        orderBtn.textContent = "Buyurtma berish";
+                        orderBtn.style.backgroundColor = "";
+                    }, 1500);
+                    
+                    showNotification(`${item.name} savatga qo'shildi!`, 'success');
+                });
+                
+                // Sevimlilar uchun yurakcha
+                const heartBtn = menuItem.querySelector('.fa-heart');
+                heartBtn.addEventListener('click', () => {
+                    if (heartBtn.style.color === 'rgb(221, 221, 221)') {
+                        heartBtn.style.color = '#ff6b6b';
+                        showNotification(`${item.name} sevimlilarga qo'shildi!`, 'success');
+                    } else {
+                        heartBtn.style.color = '#ddd';
+                        showNotification(`${item.name} sevimlilardan olindi!`, 'info');
+                    }
+                });
+                
+                menuGrid.appendChild(menuItem);
+            });
+            
+            // Kategoriya tugmalarini ishga tushirish
+            const categoryBtns = section.querySelectorAll('.category-btn');
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Faol tugmani o'zgartirish
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Filtrlash
+                    const category = btn.dataset.category;
+                    const allItems = menuGrid.querySelectorAll('.menu-item');
+                    
+                    allItems.forEach(item => {
+                        if (category === 'all' || item.dataset.category === category) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Sahifa yuklanganda menyularni yuklash
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMenuItems('drinks', menuData.drinks);
+            loadMenuItems('desserts', menuData.desserts);
+            loadMenuItems('meals', menuData.meals);
+            loadMenuItems('snacks', menuData.snacks);
+            
+            // Scroll animatsiyalari
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Navigatsiya linklarini ishga tushirish
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Yangi tugmalarga hodisa qo'shish (agar DOM o'zgartirilgan bo'lsa)
+            document.getElementById('openLoginBtn')?.addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+            
+            document.getElementById('openRegisterBtn')?.addEventListener('click', function() {
+                registerModal.style.display = 'flex';
+            });
+            
+            console.log('Sayt yuklandi. Kirish va ro\'yxatdan o\'tish tizimi faol.');
+        });
+    </script>
+</body>
+</html>
