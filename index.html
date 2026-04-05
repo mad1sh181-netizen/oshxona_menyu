@@ -1,1060 +1,1215 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menga  Maktab Oshxona Menyusi</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #4ecdc4;
-            --dark-color: #292f36;
-            --light-color: #f7fff7;
-            --accent-color: #ffe66d;
-            --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: var(--dark-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header va navigatsiya */
-        header {
-            background-color: white;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            animation: slideDown 0.8s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateY(-100%); }
-            to { transform: translateY(0); }
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-color);
-        }
-
-        .logo i {
-            color: var(--secondary-color);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark-color);
-            font-weight: 600;
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            background: var(--primary-color);
-            bottom: -5px;
-            left: 0;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-login {
-            background-color: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-register {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
-        }
-
-        /* Kirish/Ro'yxatdan o'tish modallari */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 40px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-color);
-        }
-
-        .close-modal:hover {
-            color: var(--primary-color);
-        }
-
-        .form-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--primary-color);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .form-submit:hover {
-            background-color: #ff5252;
-        }
-
-        /* Menyu bo'limlari */
-        .menu-section {
-            padding: 80px 0 40px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            color: var(--dark-color);
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        .menu-categories {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 40px;
-        }
-
-        .category-btn {
-            padding: 12px 25px;
-            background-color: white;
-            border: 2px solid #eee;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .category-btn.active,
-        .category-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .menu-item {
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            animation: itemAppear 0.5s ease-out;
-            animation-fill-mode: both;
-        }
-
-        @keyframes itemAppear {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .menu-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .item-image {
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .item-price {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-        }
-
-        .item-content {
-            padding: 20px;
-        }
-
-        .item-title {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-
-        .item-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
-
-        .item-order {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-order {
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-order:hover {
-            background-color: #3db8af;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 50px 0 20px;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            color: var(--light-color);
-        }
-
-        .footer-links h4 {
-            margin-bottom: 20px;
-            color: var(--accent-color);
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: #ccc;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
-            padding-left: 5px;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-
-        /* Animatsiyalar uchun */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive dizayn */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .menu-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-            
-            .menu-categories {
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding-bottom: 10px;
-            }
-            
-            .auth-buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .btn {
-                padding: 8px 15px;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .modal-content {
-                padding: 30px 20px;
-            }
-            
-            .auth-buttons {
-                flex-direction: column;
-                gap: 8px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Maktab Oshxonasi | Glassmorphism</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #111;
+      color: #eee;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    /* ----- GLASSMORPHISM NAVIGATION ----- */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(20, 20, 20, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 15px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(194, 138, 82, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #c28a52;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo i {
+      font-size: 32px;
+      color: #c28a52;
+      filter: drop-shadow(0 0 10px rgba(194, 138, 82, 0.3));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.1);
+    }
+
+    .nav-links a:hover {
+      background: rgba(194, 138, 82, 0.15);
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .nav-links a.active {
+      background: rgba(194, 138, 82, 0.2);
+      color: #c28a52;
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      box-shadow: 0 0 20px rgba(194, 138, 82, 0.2);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .auth-buttons button {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      color: #c28a52;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .auth-buttons button:hover {
+      background: rgba(194, 138, 82, 0.2);
+      border: 1px solid rgba(194, 138, 82, 0.6);
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .auth-buttons button.signup {
+      background: rgba(194, 138, 82, 0.2);
+      color: #c28a52;
+      border: 1px solid rgba(194, 138, 82, 0.4);
+    }
+
+    .auth-buttons button.signup:hover {
+      background: rgba(194, 138, 82, 0.3);
+    }
+
+    .user-greeting {
+      color: #c28a52;
+      font-weight: 600;
+      margin-right: 10px;
+      padding: 8px 15px;
+      background: rgba(194, 138, 82, 0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 30px;
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cart-icon {
+      background: rgba(194, 138, 82, 0.2);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      color: #c28a52;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .cart-icon:hover {
+      background: rgba(194, 138, 82, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .cart-count {
+      background: #c28a52;
+      color: #111;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
+      background: rgba(255, 68, 68, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: #ff4444;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 68, 68, 0.2);
+      border: 1px solid rgba(255, 68, 68, 0.6);
+    }
+
+    /* ----- HERO BANNER (TO'LIQ TO'G'IRLANGAN) ----- */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 120px 8% 80px;  /* Yuqori padding navigatsiya uchun */
+      margin-top: 0;
+    }
+
+    .hero-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+      animation: fadeInUp 1s ease;
+      
+      /* Glassmorphism */
+      background: rgba(10, 10, 10, 0.25);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      border-radius: 30px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      padding: 40px 50px;
+    }
+
+    .hero-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 30px;
+      background: linear-gradient(135deg, 
+        rgba(194, 138, 82, 0.1) 0%, 
+        transparent 50%);
+      pointer-events: none;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-content span {
+      color: #c28a52;
+      letter-spacing: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      background: rgba(194, 138, 82, 0.2);
+      backdrop-filter: blur(5px);
+      padding: 8px 20px;
+      border-radius: 40px;
+      display: inline-block;
+      margin-bottom: 20px;
+      border: 1px solid rgba(194, 138, 82, 0.3);
+    }
+
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 54px;
+      margin: 15px 0;
+      line-height: 1.2;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-content p {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.7;
+      margin-bottom: 30px;
+      font-size: 17px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .hero-content a {
+      text-decoration: none;
+      background: rgba(194, 138, 82, 0.2);
+      backdrop-filter: blur(5px);
+      color: #c28a52;
+      padding: 14px 35px;
+      font-weight: 600;
+      border-radius: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: 0.3s;
+      font-size: 17px;
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      cursor: pointer;
+    }
+
+    .hero-content a:hover {
+      background: rgba(194, 138, 82, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    /* ----- SECTIONS (GLASSMORPHISM CARDS) ----- */
+    section {
+      padding: 100px 8%;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #c28a52;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #c28a52, transparent);
+    }
+
+    .section-desc {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 50px;
+      font-size: 18px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(194, 138, 82, 0.15);
+      border-radius: 24px;
+      padding: 20px;
+      transition: 0.4s;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, 
+        rgba(194, 138, 82, 0.05) 0%, 
+        transparent 50%);
+      border-radius: 24px;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(194, 138, 82, 0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #c28a52;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 12px;
+    }
+
+    .price {
+      color: #c28a52;
+      font-weight: 700;
+      font-size: 20px;
+      margin: 12px 0;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .add-to-cart {
+      background: rgba(194, 138, 82, 0.15);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      color: #c28a52;
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-weight: 600;
+      flex: 1;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .add-to-cart:hover {
+      background: rgba(194, 138, 82, 0.25);
+      border: 1px solid rgba(194, 138, 82, 0.5);
+      transform: scale(1.02);
+    }
+
+    /* ----- MODAL (GLASSMORPHISM) ----- */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-card {
+      background: rgba(20, 20, 20, 0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 50px;
+      border-radius: 40px;
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      animation: modalPop 0.3s ease;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+
+    @keyframes modalPop {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-card h2 {
+      font-family: 'Playfair Display', serif;
+      color: #c28a52;
+      margin-bottom: 30px;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modal-card input {
+      width: 100%;
+      padding: 15px 20px;
+      margin: 12px 0;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.2);
+      border-radius: 40px;
+      color: white;
+      font-size: 16px;
+    }
+
+    .modal-card input:focus {
+      outline: none;
+      border-color: rgba(194, 138, 82, 0.5);
+      box-shadow: 0 0 20px rgba(194, 138, 82, 0.2);
+    }
+
+    .role-selector {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .role-selector label {
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: #ff4444;
+      font-size: 14px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    .modal-card button {
+      background: rgba(194, 138, 82, 0.2);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      color: #c28a52;
+      padding: 16px;
+      width: 100%;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 18px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .modal-card button:hover {
+      background: rgba(194, 138, 82, 0.3);
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .close-modal {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    .close-modal:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      color: #fff !important;
+    }
+
+    /* ----- CART PANEL (GLASSMORPHISM) ----- */
+    .cart-panel {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 400px;
+      height: 100vh;
+      background: rgba(20, 20, 20, 0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(194, 138, 82, 0.3);
+      z-index: 1500;
+      padding: 25px;
+      transition: 0.4s;
+      overflow-y: auto;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    .cart-panel.active {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(194, 138, 82, 0.3);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .cart-header h3 {
+      color: #c28a52;
+      font-size: 24px;
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .close-cart {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+
+    .close-cart:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .cart-items {
+      max-height: calc(100vh - 250px);
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.15);
+      padding: 15px;
+      border-radius: 20px;
+      margin: 10px 0;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      color: #c28a52;
+    }
+
+    .cart-item-price {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-item-actions button {
+      background: rgba(194, 138, 82, 0.15);
+      border: 1px solid rgba(194, 138, 82, 0.3);
+      color: #c28a52;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .cart-item-actions button:hover {
+      background: rgba(194, 138, 82, 0.25);
+    }
+
+    .cart-item-actions button.delete {
+      background: rgba(255, 68, 68, 0.15);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: #ff4444;
+    }
+
+    .cart-item-actions button.delete:hover {
+      background: rgba(255, 68, 68, 0.25);
+    }
+
+    .cart-total {
+      margin: 25px 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: #c28a52;
+      text-align: right;
+      border-top: 1px solid rgba(194, 138, 82, 0.3);
+      padding-top: 20px;
+    }
+
+    .checkout-btn {
+      background: rgba(194, 138, 82, 0.2);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(194, 138, 82, 0.4);
+      color: #c28a52;
+      width: 100%;
+      padding: 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .checkout-btn:hover {
+      background: rgba(194, 138, 82, 0.3);
+      transform: scale(1.02);
+    }
+
+    .empty-cart {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 40px 20px;
+      font-size: 18px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: rgba(255, 255, 255, 0.5);
+      background: rgba(10, 10, 10, 0.5);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(194, 138, 82, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-content {
+        max-width: 90%;
+        padding: 30px 35px;
+      }
+      
+      .hero-content h1 {
+        font-size: 42px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .hero-section {
+        padding: 100px 5% 60px;
+      }
+      
+      .hero-content h1 {
+        font-size: 36px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .cart-panel {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-content {
+        padding: 25px 20px;
+      }
+      
+      .hero-content h1 {
+        font-size: 28px;
+      }
+      
+      .hero-content p {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header va Navigatsiya -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <i class="fas fa-utensils"></i>
-                    <span>MengaMa' Tab</span>
-                </div>
-                
-                <div class="nav-links">
-                    <a href="#drinks">Ichimliklar</a>
-                    <a href="#desserts">Shirinliklar</a>
-                    <a href="#meals">Taomlar</a>
-                    <a href="#snacks">Sneklar</a>
-                </div>
-                
-                <div class="auth-buttons">
-                    <button class="btn btn-login" id="openLoginBtn">Kirish</button>
-                    <button class="btn btn-register" id="openRegisterBtn">Ro'yxatdan o'tish</button>
-                </div>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Kirish Modali -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeLoginModal">&times;</span>
-            <h2 class="form-title">Hisobga kirish</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Elektron pochta</label>
-                    <input type="email" id="loginEmail" placeholder="email@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Parol</label>
-                    <input type="password" id="loginPassword" placeholder="Parolingizni kiriting" required>
-                </div>
-                <button type="submit" class="form-submit">Kirish</button>
-                <div style="text-align: center; margin-top: 15px;">
-                    <a href="#" style="color: var(--primary-color); text-decoration: none;">Parolni unutdingizmi?</a>
-                </div>
-            </form>
-        </div>
+<!-- GLASSMORPHISM NAVIGATION -->
+<nav>
+  <div class="logo">
+    <i class="fas fa-utensils"></i>
+    Maktab Oshxonasi
+  </div>
+  <div class="nav-links">
+    <a href="#" class="active"><i class="fas fa-home"></i> Bosh</a>
+    <a href="#taomlar"><i class="fas fa-utensil-spoon"></i> Taomlar</a>
+    <a href="#ichimliklar"><i class="fas fa-coffee"></i> Ichimliklar</a>
+    <a href="#shirinliklar"><i class="fas fa-cake"></i> Shirinliklar</a>
+    <a href="#snacklar"><i class="fas fa-cookie"></i> Snacklar</a>
+  </div>
+  <div class="auth-buttons" id="authButtons"></div>
+</nav>
+
+<!-- HERO BANNER (GLASSMORPHISM) -->
+<div class="hero-section">
+  <img src="https://i.pinimg.com/1200x/87/56/5f/87565f02bdd0caad4e0b3c46703f33c7.jpg" class="hero-image" alt="Maktab Oshxonasi Banner">
+  
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-content">
+    <span><i class="fas fa-star"></i> MAKTAB OSHXONASI</span>
+    <h1>Sog‘lom va sifatli taomlar</h1>
+    <p>O‘quvchilar va o‘qituvchilar uchun har kuni yangi, toza va nazorat ostida tayyorlanadigan ovqatlar. Nonushta, tushlik, snack va shirinliklar.</p>
+    <a href="#taomlar"><i class="fas fa-arrow-right"></i> Menyuni ko‘rish</a>
+  </div>
+</div>
+
+<!-- MENYU BO'LIMLARI (GLASSMORPHISM CARDS) -->
+<section id="taomlar">
+  <h2 class="section-title">🥘 Issiq taomlar</h2>
+  <p class="section-desc">12+ xil milliy va maktab taomlari</p>
+  <div class="menu-grid" id="food-section"></div>
+</section>
+
+<section id="ichimliklar">
+  <h2 class="section-title">🧃 Ichimliklar</h2>
+  <p class="section-desc">Sovuq va issiq ichimliklar</p>
+  <div class="menu-grid" id="drink-section"></div>
+</section>
+
+<section id="shirinliklar">
+  <h2 class="section-title">🍰 Shirinliklar</h2>
+  <p class="section-desc">Kunlik yangi pishiriqlar</p>
+  <div class="menu-grid" id="dessert-section"></div>
+</section>
+
+<section id="snacklar">
+  <h2 class="section-title">🥨 Snacklar</h2>
+  <p class="section-desc">Tanaffus uchun gazaklar</p>
+  <div class="menu-grid" id="snack-section"></div>
+</section>
+
+<!-- SAVAT PANELI (GLASSMORPHISM) -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-cart"></i> Savat</h3>
+    <button class="close-cart" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div id="cart-items" class="cart-items"></div>
+  <div class="cart-total" id="cart-total">Jami: 0 so‘m</div>
+  <button class="checkout-btn" onclick="buyurtmaBerish()"><i class="fas fa-check"></i> Buyurtma berish</button>
+</div>
+
+<!-- AUTH MODAL (GLASSMORPHISM) -->
+<div class="modal" id="authModal">
+  <div class="modal-card">
+    <h2 id="authModalTitle"><i class="fas fa-sign-in-alt"></i> Kirish</h2>
+    
+    <div id="signupExtra" style="display: none;">
+      <div class="role-selector">
+        <label>
+          <input type="radio" name="role" value="student" checked> 
+          <i class="fas fa-user-graduate"></i> O‘quvchi
+        </label>
+        <label>
+          <input type="radio" name="role" value="teacher"> 
+          <i class="fas fa-chalkboard-teacher"></i> O‘qituvchi
+        </label>
+      </div>
+      <input type="text" id="classInput" placeholder="Sinf (masalan: 9-A)">
     </div>
 
-    <!-- Ro'yxatdan o'tish Modali -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="close-modal" id="closeRegisterModal">&times;</span>
-            <h2 class="form-title">Ro'yxatdan o'tish</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="regName">Ism</label>
-                    <input type="text" id="regName" placeholder="Ismingiz" required>
-                </div>
-                <div class="form-group">
-                    <label for="regEmail">Elektron pochta</label>
-                    <input type="email" id="regEmail" placeholder="email@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="regPassword">Parol</label>
-                    <input type="password" id="regPassword" placeholder="Kamida 6 ta belgi" required>
-                </div>
-                <div class="form-group">
-                    <label for="regConfirmPassword">Parolni tasdiqlash</label>
-                    <input type="password" id="regConfirmPassword" placeholder="Parolni qayta kiriting" required>
-                </div>
-                <button type="submit" class="form-submit">Ro'yxatdan o'tish</button>
-                <div style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
-                    Ro'yxatdan o'tish orqali siz <a href="#" style="color: var(--primary-color);">foydalanish shartlari</a> bilan rozilik bildirasiz
-                </div>
-            </form>
-        </div>
-    </div>
+    <input type="text" id="authName" placeholder="Ism">
+    <input type="password" id="authPass" placeholder="Parol">
+    <div class="error-message" id="authError"></div>
+    
+    <button id="authActionBtn" onclick="handleAuth()">Kirish</button>
+    <button class="close-modal" onclick="closeAuthModal()">Yopish</button>
+  </div>
+</div>
 
-    <!-- Ichimliklar bo'limi -->
-    <section class="menu-section" id="drinks">
-        <div class="container">
-            <h2 class="section-title animate-on-scroll">Ichimliklar</h2>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Hammasi</button>
-                <button class="category-btn" data-category="hot">Issiq</button>
-                <button class="category-btn" data-category="cold">Sovuq</button>
-                <button class="category-btn" data-category="juice">Sharbatlar</button>
-            </div>
-            
-            <div class="menu-grid">
-                <!-- Ichimliklar bu yerda dinamik ravishda yuklanadi -->
-            </div>
-        </div>
-    </section>
+<footer>
+  <i class="fas fa-copyright"></i> 2026 Maktab Oshxonasi | Glassmorphism Design
+</footer>
 
-    <!-- Shirinliklar bo'limi -->
-    <section class="menu-section" id="desserts">
-        <div class="container">
-            <h2 class="section-title animate-on-scroll">Shirinliklar</h2>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Hammasi</button>
-                <button class="category-btn" data-category="cake">Tortlar</button>
-                <button class="category-btn" data-category="pastry">Pishiriqlar</button>
-                <button class="category-btn" data-category="icecream">Muzqaymoq</button>
-            </div>
-            
-            <div class="menu-grid">
-                <!-- Shirinliklar bu yerda dinamik ravishda yuklanadi -->
-            </div>
-        </div>
-    </section>
+<script>
+  // MAHSULOTLAR
+  const menuItems = {
+    foods: [
+      { id: 1, name: "Pirashka", desc: "Hamir, Gosht", price: 5000, img: "https://i.pinimg.com/736x/89/96/58/89965873497f93dd8bd61785e371f314.jpg" },
+      { id: 2, name: "Somsa", desc: "Tandir somsa", price: 12000, img: "https://i.pinimg.com/736x/4d/ca/5a/4dca5ae68323dc8526b8cc811e2740ed.jpg" },
+      { id: 3, name: "Shorva", desc: "Lag'mon, Sabzavotlar", price: 10000, img: "https://i.pinimg.com/736x/cf/ce/3a/cfce3a5d386a31f6f056b4f85084b218.jpg" },
+      { id: 4, name: "Boluchka", desc: "Sasiskali", price: 4000, img: "https://i.pinimg.com/736x/e4/9f/15/e49f1527f8f72d0e440130e65870bc42.jpg" },
+      { id: 5, name: "Palov", desc: "Mol go‘sht", price: 15000, img: "https://i.pinimg.com/736x/9c/8f/89/9c8f89b69a612702145788cc40a7711e.jpg" },
+      { id: 6, name: "Kotlet", desc: "Pyure bilan", price: 9000, img: "https://i.pinimg.com/736x/92/6d/3d/926d3d802b09eba70c47baa543b912ad.jpg" }
+    ],
+    drinks: [
+      { id: 7, name: "Coco Cola", desc: "0.5l", price: 7000, img: "https://i.pinimg.com/736x/d9/90/b4/d990b4e3fafb7073f2ab7241e48aea0b.jpg" },
+      { id: 8, name: "Suv", desc: "0.5l", price: 2000, img: "https://i.pinimg.com/736x/ef/63/dd/ef63ddb07e1ece007b2de75e34e37e79.jpg" },
+      { id: 9, name: "Kompot", desc: "Mevali", price: 3000, img: "https://i.pinimg.com/736x/b6/c6/c0/b6c6c0f1db9b938b0cecf40fa3603d92.jpg" },
+      { id: 10, name: "Choy", desc: "Limonli", price: 2000, img: "https://i.pinimg.com/736x/a4/cc/b4/a4ccb4c8c19e098669cd2ebfce18c683.jpg" }
+    ],
+    desserts: [
+      { id: 11, name: "Medovik", desc: "Asal tort", price: 8000, img: "https://i.pinimg.com/736x/e9/9d/2e/e99d2e24960e512e459fd2aa49e2e3cb.jpg" },
+      { id: 12, name: "Napolyon", desc: "Shakarli", price: 4000, img: "https://i.pinimg.com/736x/b6/81/1a/b6811a8333c5096d59bef4b44724f08a.jpg" },
+      { id: 13, name: "Pirojniy", desc: "Kremli", price: 5000, img: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c" }
+    ],
+    snacks: [
+      { id: 14, name: "Chips", desc: "Smetana", price: 9000, img: "https://i.pinimg.com/736x/35/7d/6d/357d6dbb6eb472d2f0d56acacb796100.jpg" },
+      { id: 15, name: "Xuristim", desc: "Shashlik", price: 5000, img: "data:image/jpeg;base64,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" },
+      { id: 16, name: "Qurt", desc: "Sirlik, Sutlik", price: 4000, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4LrDF3YMm4Uu37gk8fKrhXWXKOzc9retjFQ&s" }
+    ]
+  };
 
-    <!-- Taomlar bo'limi -->
-    <section class="menu-section" id="meals">
-        <div class="container">
-            <h2 class="section-title animate-on-scroll">Taomlar</h2>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Hammasi</button>
-                <button class="category-btn" data-category="main">Asosiy taomlar</button>
-                <button class="category-btn" data-category="fastfood">Fast food</button>
-                <button class="category-btn" data-category="soup">Sho'rvalar</button>
-            </div>
-            
-            <div class="menu-grid">
-                <!-- Taomlar bu yerda dinamik ravishda yuklanadi -->
-            </div>
-        </div>
-    </section>
+  // SAVAT
+  let cart = [];
+  let currentUser = null;
 
-    <!-- Sneklar bo'limi -->
-    <section class="menu-section" id="snacks">
-        <div class="container">
-            <h2 class="section-title animate-on-scroll">Sneklar</h2>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Hammasi</button>
-                <button class="category-btn" data-category="chips">Chips</button>
-                <button class="category-btn" data-category="crackers">Suxarilar</button>
-                <button class="category-btn" data-category="other">Boshqalar</button>
-            </div>
-            
-            <div class="menu-grid">
-                <!-- Sneklar bu yerda dinamik ravishda yuklanadi -->
-            </div>
-        </div>
-    </section>
+  // FOYDALANUVCHILAR
+  const users = [
+    { username: 'ali', password: '123', name: 'Ali', role: 'student', class: '9-A' },
+    { username: 'vali', password: '123', name: 'Vali', role: 'student', class: '10-B' },
+    { username: 'teacher', password: '123', name: 'Akmal', role: 'teacher' }
+  ];
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <div class="footer-logo">MengaMa' Tab</div>
-                    <p>Biz eng mazali va sifatli ovqatlarni taqdim etamiz. Har bir mahsulotimiz eng yuqori standartlar asosida tayyorlanadi.</p>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Bo'limlar</h4>
-                    <ul>
-                        <li><a href="#drinks">Ichimliklar</a></li>
-                        <li><a href="#desserts">Shirinliklar</a></li>
-                        <li><a href="#meals">Taomlar</a></li>
-                        <li><a href="#snacks">Sneklar</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-links">
-                    <h4>Aloqa</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Toshkent shahri, Yunusobod tumani</li>
-                        <li><i class="fas fa-phone"></i> +998 90 123 45 67</li>
-                        <li><i class="fas fa-envelope"></i> info@mengamatab.uz</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                &copy; 2023 MengaMa' Tab. Barcha huquqlar himoyalangan.
-            </div>
-        </div>
-    </footer>
+  // MENYUNI CHIQARISH
+  function renderMenu() {
+    document.getElementById('food-section').innerHTML = renderItems(menuItems.foods);
+    document.getElementById('drink-section').innerHTML = renderItems(menuItems.drinks);
+    document.getElementById('dessert-section').innerHTML = renderItems(menuItems.desserts);
+    document.getElementById('snack-section').innerHTML = renderItems(menuItems.snacks);
+  }
 
-    <script>
-        // Ma'lumotlar bazasi - menyu elementlari
-        const menuData = {
-            drinks: [
-                { id: 1, name: "Kofe Latte", description: "Italyancha sutli kofe", price: "18 000", category: "hot", image: "coffee" },
-                { id: 2, name: "Choy", description: "Qora yoki yashil choy", price: "5 000", category: "hot", image: "tea" },
-                { id: 3, name: "Coca-Cola", description: "Sovuq gazlangan ichimlik", price: "10 000", category: "cold", image: "cola" },
-                { id: 4, name: "Limonli choy", description: "Tabiiy limon sharbati", price: "12 000", category: "juice", image: "lemonade" },
-                { id: 5, name: "Qahva", description: "An'anaviy turk qahvasi", price: "15 000", category: "hot", image: "coffee" },
-                { id: 6, name: "Olma sharbati", description: "Tabiiy olma sharbati", price: "14 000", category: "juice", image: "juice" }
-            ],
-            desserts: [
-                { id: 7, name: "Chocolate Cake", description: "Shokoladli tort", price: "25 000", category: "cake", image: "cake" },
-                { id: 8, name: "Cheesecake", description: "Pishloqli tort", price: "28 000", category: "cake", image: "cake" },
-                { id: 9, name: "Donut", description: "Shokoladli donut", price: "12 000", category: "pastry", image: "donut" },
-                { id: 10, name: "Vanilla Ice Cream", description: "Vanilli muzqaymoq", price: "15 000", category: "icecream", image: "icecream" },
-                { id: 11, name: "Tiramisu", description: "Italyan shirinligi", price: "30 000", category: "cake", image: "cake" },
-                { id: 12, name: "Chocolate Chip Cookie", description: "Shokoladli pechene", price: "8 000", category: "pastry", image: "cookie" }
-            ],
-            meals: [
-                { id: 13, name: "Piroshka", description: "Qiymali pirojnoe", price: "15 000", category: "fastfood", image: "piroshki" },
-                { id: 14, name: "Sendvich", description: "Tovuq go'shtli sendvich", price: "22 000", category: "fastfood", image: "sandwich" },
-                { id: 15, name: "Gumma", description: "Qaymoqli gumma", price: "18 000", category: "fastfood", image: "dumpling" },
-                { id: 16, name: "Sosiskali piroshka", description: "Sosiska bilan pirojnoe", price: "17 000", category: "fastfood", image: "piroshki" },
-                { id: 17, name: "Sho'rva", description: "Go'shtli sho'rva", price: "25 000", category: "soup", image: "soup" },
-                { id: 18, name: "Somsa", description: "Qiymali somsa", price: "12 000", category: "main", image: "samsa" }
-            ],
-            snacks: [
-                { id: 19, name: "Chips", description: "Kartoshka chips", price: "10 000", category: "chips", image: "chips" },
-                { id: 20, name: "Suxarilar", description: "Bug'doy suxarilari", price: "8 000", category: "crackers", image: "crackers" },
-                { id: 21, name: "Qur", description: "Quritilgan mevalar", price: "12 000", category: "other", image: "dried" },
-                { id: 22, name: "Yong'oq", description: "Aralash yong'oq", price: "15 000", category: "other", image: "nuts" },
-                { id: 23, name: "Popcorn", description: "Tuzli popcorn", price: "9 000", category: "other", image: "popcorn" },
-                { id: 24, name: "Chocolate Bar", description: "Sutli shokolad", price: "12 000", category: "other", image: "chocolate" }
-            ]
+  function renderItems(items) {
+    return items.map(item => `
+      <div class="card">
+        <img src="${item.img}" loading="lazy" alt="${item.name}">
+        <h3>${item.name}</h3>
+        <p>${item.desc}</p>
+        <div class="price">${item.price.toLocaleString()} so‘m</div>
+        <div class="card-actions">
+          <button class="add-to-cart" onclick="addToCart(${item.id})">
+            <i class="fas fa-cart-plus"></i> Savatga
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // SAVATGA QO'SHISH
+  window.addToCart = (itemId) => {
+    const item = findItemById(itemId);
+    if (!item) return;
+
+    const existingItem = cart.find(i => i.id === itemId);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({ ...item, quantity: 1 });
+    }
+    
+    updateCartUI();
+    alert(`${item.name} savatga qo'shildi!`);
+  };
+
+  // SAVATDAN O'CHIRISH
+  window.removeFromCart = (itemId) => {
+    cart = cart.filter(item => item.id !== itemId);
+    updateCartUI();
+  };
+
+  // SAVATNI YANGILASH
+  function updateCartUI() {
+    const cartDiv = document.getElementById('cart-items');
+    const totalSpan = document.getElementById('cart-total');
+    const countSpan = document.getElementById('cart-count');
+    
+    if (cart.length === 0) {
+      cartDiv.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart fa-3x"></i><p>Savat bo‘sh</p></div>';
+      totalSpan.innerText = 'Jami: 0 so‘m';
+      if(countSpan) countSpan.innerText = '0';
+      return;
+    }
+
+    let html = '';
+    let total = 0;
+    let totalItems = 0;
+    
+    cart.forEach(item => {
+      const itemTotal = item.price * item.quantity;
+      total += itemTotal;
+      totalItems += item.quantity;
+      
+      html += `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${item.price.toLocaleString()} so‘m x ${item.quantity}</div>
+          </div>
+          <div class="cart-item-actions">
+            <button onclick="updateQuantity(${item.id}, -1)">-</button>
+            <span>${item.quantity}</span>
+            <button onclick="updateQuantity(${item.id}, 1)">+</button>
+            <button class="delete" onclick="removeFromCart(${item.id})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    cartDiv.innerHTML = html;
+    totalSpan.innerText = `Jami: ${total.toLocaleString()} so‘m`;
+    if(countSpan) countSpan.innerText = totalItems;
+  }
+
+  // QUANTITY NI O'ZGARTIRISH
+  window.updateQuantity = (itemId, change) => {
+    const itemIndex = cart.findIndex(i => i.id === itemId);
+    if (itemIndex === -1) return;
+
+    const newQuantity = cart[itemIndex].quantity + change;
+    
+    if (newQuantity <= 0) {
+      cart.splice(itemIndex, 1);
+    } else {
+      cart[itemIndex].quantity = newQuantity;
+    }
+    
+    updateCartUI();
+  };
+
+  // ID ORQALI MAHSULOTNI TOPISH
+  function findItemById(id) {
+    for (let category in menuItems) {
+      const found = menuItems[category].find(item => item.id === id);
+      if (found) return found;
+    }
+    return null;
+  }
+
+  // SAVATNI KO'RSATISH/YOPISH
+  window.toggleCart = () => {
+    document.getElementById('cartPanel').classList.toggle('active');
+  };
+
+  // BUYURTMA BERISH
+  window.buyurtmaBerish = () => {
+    if (!currentUser) {
+      alert('Iltimos, avval tizimga kiring!');
+      openAuthModal('login');
+      return;
+    }
+    
+    if (cart.length === 0) {
+      alert('Savat bo‘sh!');
+      return;
+    }
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    alert(`✅ Buyurtmangiz qabul qilindi, ${currentUser.name}!\nJami: ${total.toLocaleString()} so‘m`);
+    cart = [];
+    updateCartUI();
+    toggleCart();
+  };
+
+  // AUTH MODAL
+  window.openAuthModal = (type) => {
+    const modal = document.getElementById('authModal');
+    const title = document.getElementById('authModalTitle');
+    const extra = document.getElementById('signupExtra');
+    const actionBtn = document.getElementById('authActionBtn');
+    const errorMsg = document.getElementById('authError');
+    
+    errorMsg.style.display = 'none';
+    document.getElementById('authName').value = '';
+    document.getElementById('authPass').value = '';
+
+    if (type === 'login') {
+      title.innerHTML = '<i class="fas fa-sign-in-alt"></i> Kirish';
+      extra.style.display = 'none';
+      actionBtn.innerText = 'Kirish';
+    } else {
+      title.innerHTML = '<i class="fas fa-user-plus"></i> Ro‘yxatdan o‘tish';
+      extra.style.display = 'block';
+      actionBtn.innerText = 'Ro‘yxatdan o‘tish';
+    }
+    modal.style.display = 'flex';
+  };
+
+  window.closeAuthModal = () => {
+    document.getElementById('authModal').style.display = 'none';
+  };
+
+  window.handleAuth = () => {
+    const name = document.getElementById('authName').value;
+    const password = document.getElementById('authPass').value;
+    const errorMsg = document.getElementById('authError');
+    const mode = document.getElementById('authActionBtn').innerText;
+
+    if (!name || !password) {
+      errorMsg.innerText = 'Ism va parolni kiriting!';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    if (mode === 'Kirish') {
+      // LOGIN
+      const user = users.find(u => u.username === name && u.password === password);
+      
+      if (user) {
+        currentUser = {
+          name: user.name,
+          role: user.role,
+          class: user.class
         };
+        errorMsg.style.display = 'none';
+        updateNavForUser();
+        closeAuthModal();
+        alert(`Xush kelibsiz, ${user.name}!`);
+      } else {
+        errorMsg.innerText = 'Xato: Noto\'g\'ri ism yoki parol!';
+        errorMsg.style.display = 'block';
+      }
+    } else {
+      // SIGNUP
+      const roleRadios = document.getElementsByName('role');
+      let role = 'student';
+      for (let r of roleRadios) {
+        if (r.checked) role = r.value;
+      }
+      const studentClass = document.getElementById('classInput').value;
 
-        // Rasm ranglari - har bir mahsulot uchun
-        const imageColors = {
-            coffee: "#6f4e37",
-            tea: "#d4a574",
-            cola: "#8b0000",
-            lemonade: "#ffd700",
-            juice: "#ff4500",
-            cake: "#d2691e",
-            donut: "#8b4513",
-            icecream: "#ffebcd",
-            cookie: "#a0522d",
-            piroshki: "#ff8c00",
-            sandwich: "#daa520",
-            dumpling: "#deb887",
-            soup: "#ff6347",
-            samsa: "#cd853f",
-            chips: "#ffa500",
-            crackers: "#f5deb3",
-            dried: "#8b7355",
-            nuts: "#8b4513",
-            popcorn: "#fffacd",
-            chocolate: "#8b4513"
-        };
+      if (role === 'student' && !studentClass) {
+        errorMsg.innerText = 'Iltimos, sinfingizni kiriting!';
+        errorMsg.style.display = 'block';
+        return;
+      }
 
-        // Modal elementlarini aniqlash
-        const loginModal = document.getElementById('loginModal');
-        const registerModal = document.getElementById('registerModal');
-        const openLoginBtn = document.getElementById('openLoginBtn');
-        const openRegisterBtn = document.getElementById('openRegisterBtn');
-        const closeLoginModal = document.getElementById('closeLoginModal');
-        const closeRegisterModal = document.getElementById('closeRegisterModal');
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
+      // Yangi foydalanuvchi qo'shish
+      users.push({
+        username: name,
+        password: password,
+        name: name,
+        role: role,
+        class: studentClass
+      });
 
-        // Kirish modalini ochish
-        openLoginBtn.addEventListener('click', function() {
-            loginModal.style.display = 'flex';
-            console.log('Kirish modal ochildi');
-        });
+      currentUser = {
+        name: name,
+        role: role,
+        class: studentClass
+      };
 
-        // Ro'yxatdan o'tish modalini ochish
-        openRegisterBtn.addEventListener('click', function() {
-            registerModal.style.display = 'flex';
-            console.log('Ro\'yxatdan o\'tish modal ochildi');
-        });
+      errorMsg.style.display = 'none';
+      updateNavForUser();
+      closeAuthModal();
+      alert(`✅ Ro‘yxatdan o‘tdingiz, ${name}!`);
+    }
+  };
 
-        // Kirish modalini yopish
-        closeLoginModal.addEventListener('click', function() {
-            loginModal.style.display = 'none';
-        });
+  // NAVIGATION NI YANGILASH
+  function updateNavForUser() {
+    const authDiv = document.getElementById('authButtons');
+    if (currentUser) {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      authDiv.innerHTML = `
+        <span class="user-greeting"><i class="fas fa-user"></i> Salom, ${currentUser.name}!</span>
+        <button class="cart-icon" onclick="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">${totalItems}</span>
+        </button>
+        <button class="logout-btn" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Chiqish
+        </button>
+      `;
+    } else {
+      authDiv.innerHTML = `
+        <button onclick="openAuthModal('login')"><i class="fas fa-sign-in-alt"></i> Kirish</button>
+        <button class="signup" onclick="openAuthModal('signup')"><i class="fas fa-user-plus"></i> Ro‘yxat</button>
+        <button class="cart-icon" onclick="toggleCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+      `;
+    }
+  }
 
-        // Ro'yxatdan o'tish modalini yopish
-        closeRegisterModal.addEventListener('click', function() {
-            registerModal.style.display = 'none';
-        });
+  window.logout = () => {
+    currentUser = null;
+    updateNavForUser();
+    alert('Tizimdan chiqildi');
+  };
 
-        // Tashqariga bosilganda modalni yopish
-        window.addEventListener('click', function(e) {
-            if (e.target === loginModal) {
-                loginModal.style.display = 'none';
-            }
-            if (e.target === registerModal) {
-                registerModal.style.display = 'none';
-            }
-        });
+  // BOSHLANG'ICH SOZLAMALAR
+  renderMenu();
+  updateNavForUser();
+</script>
 
-        // Kirish formasi yuborilganda
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Oddiy tekshirish
-            if (email && password) {
-                // Amaliyotda bu yerda serverga so'rov yuboriladi
-                console.log('Kirish ma\'lumotlari:', { email, password });
-                
-                // Modalni yopish
-                loginModal.style.display = 'none';
-                
-                // Foydalanuvchiga xabar
-                showNotification('Muvaffaqiyatli kirildi!', 'success');
-                
-                // Tugmalarni o'zgartirish (kirgan foydalanuvchi uchun)
-                document.querySelector('.auth-buttons').innerHTML = `
-                    <button class="btn btn-login" id="logoutBtn">Chiqish</button>
-                    <button class="btn btn-register" id="profileBtn">Profil</button>
-                `;
-                
-                // Yangi tugmalarga hodisa qo'shish
-                document.getElementById('logoutBtn').addEventListener('click', logoutUser);
-                document.getElementById('profileBtn').addEventListener('click', showProfile);
-                
-                // Formani tozalash
-                loginForm.reset();
-            } else {
-                showNotification('Iltimos, barcha maydonlarni to\'ldiring!', 'error');
-            }
-        });
-
-        // Ro'yxatdan o'tish formasi yuborilganda
-        registerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const confirmPassword = document.getElementById('regConfirmPassword').value;
-            
-            // Tekshirishlar
-            if (!name || !email || !password || !confirmPassword) {
-                showNotification('Iltimos, barcha maydonlarni to\'ldiring!', 'error');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showNotification('Parol kamida 6 ta belgidan iborat bo\'lishi kerak!', 'error');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showNotification('Parollar mos kelmadi!', 'error');
-                return;
-            }
-            
-            // Amaliyotda bu yerda serverga so'rov yuboriladi
-            console.log('Ro\'yxatdan o\'tish ma\'lumotlari:', { name, email, password });
-            
-            // Modalni yopish
-            registerModal.style.display = 'none';
-            
-            // Foydalanuvchiga xabar
-            showNotification('Muvaffaqiyatli ro\'yxatdan o\'tdingiz!', 'success');
-            
-            // Formani tozalash
-            registerForm.reset();
-        });
-
-        // Xabarlarni ko'rsatish funksiyasi
-        function showNotification(message, type) {
-            // Oldingi xabarlarni o'chirish
-            const existingNotification = document.querySelector('.notification');
-            if (existingNotification) {
-                existingNotification.remove();
-            }
-            
-            // Yangi xabarni yaratish
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 25px;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 3000;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                animation: slideInRight 0.3s ease-out;
-            `;
-            
-            // Turiga qarab rang
-            if (type === 'success') {
-                notification.style.backgroundColor = '#4CAF50';
-            } else if (type === 'error') {
-                notification.style.backgroundColor = '#f44336';
-            } else {
-                notification.style.backgroundColor = '#2196F3';
-            }
-            
-            document.body.appendChild(notification);
-            
-            // 5 sekunddan keyin o'chirish
-            setTimeout(() => {
-                notification.style.animation = 'slideOutRight 0.3s ease-out';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 5000);
-            
-            // Animatsiya uchun CSS qo'shish
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideInRight {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOutRight {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Foydalanuvchi chiqishi
-        function logoutUser() {
-            // Tugmalarni asl holatiga qaytarish
-            document.querySelector('.auth-buttons').innerHTML = `
-                <button class="btn btn-login" id="openLoginBtn">Kirish</button>
-                <button class="btn btn-register" id="openRegisterBtn">Ro'yxatdan o'tish</button>
-            `;
-            
-            // Yangi tugmalarga hodisa qo'shish
-            document.getElementById('openLoginBtn').addEventListener('click', function() {
-                loginModal.style.display = 'flex';
-            });
-            
-            document.getElementById('openRegisterBtn').addEventListener('click', function() {
-                registerModal.style.display = 'flex';
-            });
-            
-            showNotification('Muvaffaqiyatli chiqildi!', 'success');
-        }
-
-        // Profilni ko'rsatish
-        function showProfile() {
-            showNotification('Profil sahifasi tez orada qo\'shiladi!', 'info');
-        }
-
-        // Menyu elementlarini yuklash
-        function loadMenuItems(sectionId, items) {
-            const section = document.getElementById(sectionId);
-            const menuGrid = section.querySelector('.menu-grid');
-            
-            // Tozalash
-            menuGrid.innerHTML = '';
-            
-            // Har bir elementni qo'shish
-            items.forEach((item, index) => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item animate-on-scroll';
-                menuItem.dataset.category = item.category;
-                menuItem.style.animationDelay = `${index * 0.1}s`;
-                
-                // Rasm uchun rang
-                const bgColor = imageColors[item.image] || "#ff6b6b";
-                
-                menuItem.innerHTML = `
-                    <div class="item-image" style="background-color: ${bgColor};">
-                        <div class="item-price">${item.price} so'm</div>
-                    </div>
-                    <div class="item-content">
-                        <h3 class="item-title">${item.name}</h3>
-                        <p class="item-description">${item.description}</p>
-                        <div class="item-order">
-                            <button class="btn-order">Buyurtma berish</button>
-                            <i class="fas fa-heart" style="color: #ddd; cursor: pointer;"></i>
-                        </div>
-                    </div>
-                `;
-                
-                // Buyurtma berish tugmasi
-                const orderBtn = menuItem.querySelector('.btn-order');
-                orderBtn.addEventListener('click', () => {
-                    orderBtn.textContent = "Qo'shildi!";
-                    orderBtn.style.backgroundColor = "#4CAF50";
-                    
-                    setTimeout(() => {
-                        orderBtn.textContent = "Buyurtma berish";
-                        orderBtn.style.backgroundColor = "";
-                    }, 1500);
-                    
-                    showNotification(`${item.name} savatga qo'shildi!`, 'success');
-                });
-                
-                // Sevimlilar uchun yurakcha
-                const heartBtn = menuItem.querySelector('.fa-heart');
-                heartBtn.addEventListener('click', () => {
-                    if (heartBtn.style.color === 'rgb(221, 221, 221)') {
-                        heartBtn.style.color = '#ff6b6b';
-                        showNotification(`${item.name} sevimlilarga qo'shildi!`, 'success');
-                    } else {
-                        heartBtn.style.color = '#ddd';
-                        showNotification(`${item.name} sevimlilardan olindi!`, 'info');
-                    }
-                });
-                
-                menuGrid.appendChild(menuItem);
-            });
-            
-            // Kategoriya tugmalarini ishga tushirish
-            const categoryBtns = section.querySelectorAll('.category-btn');
-            categoryBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Faol tugmani o'zgartirish
-                    categoryBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    // Filtrlash
-                    const category = btn.dataset.category;
-                    const allItems = menuGrid.querySelectorAll('.menu-item');
-                    
-                    allItems.forEach(item => {
-                        if (category === 'all' || item.dataset.category === category) {
-                            item.style.display = 'block';
-                        } else {
-                            item.style.display = 'none';
-                        }
-                    });
-                });
-            });
-        }
-
-        // Sahifa yuklanganda menyularni yuklash
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMenuItems('drinks', menuData.drinks);
-            loadMenuItems('desserts', menuData.desserts);
-            loadMenuItems('meals', menuData.meals);
-            loadMenuItems('snacks', menuData.snacks);
-            
-            // Scroll animatsiyalari
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.animate-on-scroll').forEach(el => {
-                observer.observe(el);
-            });
-            
-            // Navigatsiya linklarini ishga tushirish
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // Yangi tugmalarga hodisa qo'shish (agar DOM o'zgartirilgan bo'lsa)
-            document.getElementById('openLoginBtn')?.addEventListener('click', function() {
-                loginModal.style.display = 'flex';
-            });
-            
-            document.getElementById('openRegisterBtn')?.addEventListener('click', function() {
-                registerModal.style.display = 'flex';
-            });
-            
-            console.log('Sayt yuklandi. Kirish va ro\'yxatdan o\'tish tizimi faol.');
-        });
-    </script>
 </body>
 </html>
